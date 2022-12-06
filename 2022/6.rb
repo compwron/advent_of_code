@@ -17,7 +17,15 @@
 # zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 11
 # How many characters need to be processed before the first start-of-packet marker is detected?
 
+
+# mjqjpqmgbljsphdztnvjfqwrcgsmlb: first marker after character 19
+# bvwbjplbgvbhsrlpgdmjqwftvncz: first marker after character 23
+# nppdvjthqldpwncqszvftbrmjlhg: first marker after character 23
+# nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg: first marker after character 29
+# zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw: first marker after character 26
+
 input = "
+mjqjpqmgbljsphdztnvjfqwrcgsmlb
 bvwbjplbgvbhsrlpgdmjqwftvncz
 nppdvjthqldpwncqszvftbrmjlhg
 nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg
@@ -34,7 +42,7 @@ def last_4_uniq_index(chars)
   so_far = []
   chars.each_with_index.map { |c, i|
     so_far << c
-    if so_far.last(4).uniq.count == 4
+    if so_far.last(14).uniq.count == 14
       return i + 1
     end
   }
