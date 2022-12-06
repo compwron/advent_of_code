@@ -10,7 +10,6 @@
 # move 2 from 2 to 1
 # move 1 from 1 to 2
 
-
 #             [G] [W]         [Q]
 # [Z]         [Q] [M]     [J] [F]
 # [V]         [V] [S] [F] [N] [R]
@@ -33,16 +32,22 @@ stacks = [
   %w[l g z d w r f q],
   %w[j b w v p],
 ]
+#
+# stacks = [
+#   [], # pretend to be 0-indexed thanks
+#   %w[z n],
+#   %w[m c d],
+#   %w[p],
+# ]
 
 require 'pry'
 input = File.read("data-5.txt")
 
 results = input.strip.split("\n").each do |line|
   _, count, _, start_stack, _, end_stack = line.split(" ")
-  (0...count.to_i).each do |i|
-    item = stacks[start_stack.to_i].pop
-    stacks[end_stack.to_i] << item
-  end
+  items = stacks[start_stack.to_i].pop(count.to_i)
+  stacks[end_stack.to_i].append(*items)
 end
 p stacks
 p stacks.compact.map(&:last).join("")
+# part 2 demo: mcd
