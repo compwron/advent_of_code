@@ -5,44 +5,8 @@ input = File.read("data-7.txt")
 # In the example above, these directories are a and e; the sum of their total sizes is 95437 (94853 + 584).
 # (As in this example, this process can count files more than once!)
 #
-# Find all of the directories with a total size of at most 100000. What is the sum of the total sizes of those directories?
-# $ cd /
-# $ ls
-# dir a
-# 14848514 b.txt
-# 8504156 c.dat
-# dir d
-# $ cd a
-# $ ls
-# dir e
-# 29116 f
-# 2557 g
-# 62596 h.lst
-# $ cd e
-# $ ls
-# 584 i
-# $ cd ..
-# $ cd ..
-# $ cd d
-# $ ls
-# 4060174 j
-# 8033020 d.log
-# 5626152 d.ext
-# 7214296 k
-# - / (dir)
-#   - a (dir)
-#     - e (dir)
-#       - i (file, size=584)
-#     - f (file, size=29116)
-#     - g (file, size=2557)
-#     - h.lst (file, size=62596)
-#   - b.txt (file, size=14848514)
-#   - c.dat (file, size=8504156)
-#   - d (dir)
-#     - j (file, size=4060174)
-#     - d.log (file, size=8033020)
-#     - d.ext (file, size=5626152)
-#     - k (file, size=7214296)
+# Find all of the directories with a total size of at most 100000.
+# What is the sum of the total sizes of those directories?
 
 # tree = { "\\" => [{ "a" => [{ :filename => 1, :filesize => 11 }, { :filename => 2, :filesize => 22 }] }] }
 tree = { "\\" => [] }
@@ -56,7 +20,7 @@ input.strip.split("\n").each do |l|
     if cdx == "\\"
       current_dir = current_dir[cdx]
     else
-      current_dir = current_dir.find {|hash| hash.keys.first == cdx}[cdx]
+      current_dir = current_dir.find { |hash| hash.keys.first == cdx }[cdx]
     end
   end
   if line.include? "dir "
@@ -72,4 +36,54 @@ input.strip.split("\n").each do |l|
     current_dir << { filesize: filesize, filename: filename }
   end
 end
+binding.pry
 p tree
+# binding.pry
+bigs = []
+
+# def sum_r(dir, dir_sums = {})
+#   p "sum_r"
+#   dir.each do |sub_d|
+#     p [sub_d.class]
+#     if sub_d.class == Array
+#       p "arr"
+#       sum_r(sub_d)
+#     elsif sub_d.class == Hash
+#       if sub_d.has_key?(:filesize)
+#         p sub_d
+#         dir_sums[sub_d] ||= 0
+#         dir_sums[sub_d] += sub_d[:filesize].to_i
+#       else
+#         sub_d.values.each { |ss|
+#           sum_r(ss)
+#         }
+#       end
+#     end
+#   end
+#   dir_sums
+# end
+#
+# p sum_r(tree)
+
+# for every key in the tree,
+
+# binding.pry
+#
+# def sum_r(x)
+#   return x.first if x.length == 1 && x.first.first != "\\"
+#   return 0 if x.length < 1
+#
+#   x.to_a.pop + sum_r(x.to_a)
+# end
+# sum_r(tree)
+#
+#
+# p tree.to_a.flatten
+#   .map { |f|
+#     f.class == Hash && f.has_key?(:filesize) ? f[:filesize] : 0
+#   }
+#   .inject(:+)
+
+
+
+
