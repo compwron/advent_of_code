@@ -53,29 +53,26 @@ input.strip.split("\n").each do |l|
   p line
   next if line == "$ cd /"
   next if line == "$ ls"
-
   current_dir = tree
+  # if line == "dir e"
+  #   binding.pry
+  # end
   current_path.each do |cdx|
-    current_dir = current_dir[cdx]
-    # binding.pry
+    if cdx == "\\"
+      current_dir = current_dir[cdx]
+    else
+      current_dir = current_dir.find {|hash| hash.keys.first == cdx}[cdx]
+    end
   end
-  p current_dir
-
   if line.include? "dir "
-    p 11
     dirname = line.split(" ")[1]
     current_dir << { dirname => [] }
-    #   binding.pry
+  elsif line.include? "cd .."
+    current_path.pop
   elsif line.include? "cd "
-    p 22
-    # binding.pry
     next_dir = line.split(" ").last
     current_path << next_dir
-    current_dir << { next_dir => [] }
-    # binding.pry
   else
-    p 33
-    # binding.pry
     filesize, filename = line.split(" ")
     current_dir << { filesize: filesize, filename: filename }
   end
