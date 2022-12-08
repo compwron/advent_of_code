@@ -49,14 +49,9 @@ tree = { "\\" => [] }
 current_path = ["\\"]
 input.strip.split("\n").each do |l|
   line = l.strip
-  p tree
-  p line
   next if line == "$ cd /"
   next if line == "$ ls"
   current_dir = tree
-  # if line == "dir e"
-  #   binding.pry
-  # end
   current_path.each do |cdx|
     if cdx == "\\"
       current_dir = current_dir[cdx]
