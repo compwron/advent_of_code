@@ -36,7 +36,54 @@ input.strip.split("\n").each do |l|
     current_dir << { filesize: filesize, filename: filename }
   end
 end
-binding.pry
+
+sizes = Hash.new(0)
+
+def foo(item, total = 0)
+  if item.class == Hash
+    if item.has_key?(:filesize)
+      total += item[:filesize].to_i
+      p "new total #{total}"
+    else
+      item.keys.each do |k|
+        foo(item[k], total)
+      end
+    end
+  elsif item.class == Array
+    item.each do |i2|
+      foo(i2, total)
+    end
+  end
+end
+
+tree.keys.each do |k|
+  tree[k].each do |item|
+    binding.pry
+    if item.class == Hash
+      if item.has_key?(:filesize)
+      else
+        item.keys.each do |k2|
+          if item[k2].class == Array
+            item[k2].each do |item2|
+            end
+          end
+        end
+      end
+    elsif item.class == Array
+    end
+  end
+  item.keys.each do |k2|
+    item2 = item[k2]
+    if item.class == Hash && item.has_key?(:filesize)
+      filesize = item[:filesize].to_i
+      sizes[k] += filesize
+      sizes["#{k}#{item}"] += filesize
+      sizes["#{k}#{item}#{item2}"] += filesize
+    end
+  end
+end
+end
+
 p tree
 # binding.pry
 bigs = []
