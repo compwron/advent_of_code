@@ -5,6 +5,10 @@ input = File.read("data-13.txt")
 
 require 'json'
 
+def all_integers?(heads)
+  heads.map(&:class).uniq == [Integer]
+end
+
 def compare(left, right)
   return if left.empty? && right.empty?
   return true if left.empty?
@@ -12,14 +16,13 @@ def compare(left, right)
 
   heads = [left.first, right.first]
 
-  case heads
-  in [Integer, Integer]
-    return true if heads.reduce(:<)
-    return false if heads.reduce(:>)
+  if all_integers?(heads)
+    return true if left.first < right.first
+    return false if left.first > right.first
   else
-    heads.map! { |i| i.instance_of?(Integer) ? [i] : i }
-    comp = compare(heads[0], heads[1])
-    return comp if [true, false].include? comp
+    heads = heads.map { |i| i.is_a?(Integer) ? [i] : i } # bad to override content
+    result = compare(heads[0], heads[1])
+    return result if [true, false].include? result
   end
 
   compare(left.slice(1..), right.slice(1..))
