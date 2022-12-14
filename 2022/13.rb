@@ -1,37 +1,43 @@
 require 'pry'
 
 input = File.read("data-13.txt")
+#!/usr/bin/env ruby
 
+require 'json'
 
 def compare(left, right)
-  if left.is_a?(Integer) && right.is_a?(Integer)
-    if left < right
-      return :ok
-    elsif left > right
-      return :wrong
-    else
-      return :continue
-    end
-  elsif left.is_a?(Array) && right.is_a?(Array)
-    return :wrong if right.count < left.count
-    left.each_with_index.map do |l, l_idx|
-      result = compare(l, right[l_idx])
-      return :wrong if result == :wrong
-    end
-  elsif left.is_a?(Integer) && right.is_a?(Array)
-    return :wrong if right.count < [left].count
-    [left].each_with_index.map do |l, l_idx|
-      result = compare(l, right[l_idx])
-      return :wrong if result == :wrong
-    end
+  return if left.empty? && right.empty?
+  return true if left.empty?
+  return false if right.empty?
+
+  heads = [left.first, right.first]
+
+  case heads
+  in [Integer, Integer]
+    return true if heads.reduce(:<)
+    return false if heads.reduce(:>)
   else
-    :continue
+    heads.map! { |i| i.instance_of?(Integer) ? [i] : i }
+    comp = compare(heads[0], heads[1])
+    return comp if [true, false].include? comp
   end
+
+  compare(left.slice(1..), right.slice(1..))
 end
 
-result = input.split("\n").each_slice(3).to_a.map do |three|
-  left = eval(three[0])
-  right = eval(three[1])
-  p [left, right, compare(left, right)]
-  compare(left, right)
-end
+puts File.read('data-13.txt').split("\n\n")
+         .map { |i| i.split("\n") }
+         .map { |i| i.map { |j| JSON.parse(j) } }
+         .map.with_index(1) { |(l, r), i| compare(l, r) ? i : 0 }
+         .sum
+
+dividers = [2, 6].map { |i| [i] }
+packets = [nil] + File.read('data-13.txt').split("\n\n")
+                      .map { |i| i.gsub('[]', '[0]') }
+                      .map { |i| i.split("\n") }
+                      .map { |i| i.map { |j| JSON.parse(j) } }
+                      .reduce([]) { |acc, (i, j)| acc << i << j }
+                      .concat(dividers)
+                      .sort_by(&:flatten)
+
+puts dividers.map { |i| packets.index(i) }.reduce(:*)
